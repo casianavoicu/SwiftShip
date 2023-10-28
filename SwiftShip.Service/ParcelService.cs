@@ -29,10 +29,15 @@ namespace SwiftShip.Service
 
         public async Task<List<Parcel>> GetAllAsync()
         {
-            return await _dbContext.Parcel.ToListAsync();
+            return await _dbContext.Parcel
+                .Include(e => e.Customer)
+                .Include(e => e.StageHistory)
+                    .ThenInclude(e => e.Stage)
+                .Where(e => e.StageHistory.FirstOrDefault() != null)
+                .ToListAsync();
         }
 
-        public async Task<Parcel?> GetAsync(string id)
+        public async Task<Parcel?> GetAsync(int id)
         {
             return await _dbContext.Parcel.FirstOrDefaultAsync(e => e.Id == id);
         }

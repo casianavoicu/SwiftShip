@@ -1,6 +1,4 @@
-﻿using SwiftShip.Database.Enums;
-
-namespace SwiftShip.BusinessLogic.Models
+﻿namespace SwiftShip.BusinessLogic.Models
 {
     public class CustomerParcelModel
     {

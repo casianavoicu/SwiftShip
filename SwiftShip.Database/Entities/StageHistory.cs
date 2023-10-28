@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SwiftShip.Database.Entities
 {
@@ -12,9 +12,17 @@ namespace SwiftShip.Database.Entities
 
         public string CreatedBy { get; set; } = string.Empty;
 
-        [NotNull]
+        [ForeignKey("StageId")]
         public Stage Stage { get; set; }
 
         public string Address { get; set; }
+
+        public int StageId { get; set; }
+
+        public int ParcelId { get; set; }
+
+        [ForeignKey("ParcelId")]
+        [InverseProperty("StageHistory")]
+        public Parcel Parcel { get; set; }
     }
 }

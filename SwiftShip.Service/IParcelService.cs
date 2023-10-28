@@ -6,7 +6,7 @@ namespace SwiftShip.Service
     {
         Task<List<Parcel>> GetAllAsync();
 
-        Task<Parcel?> GetAsync(string id);
+        Task<Parcel?> GetAsync(int id);
 
         Task DeleteAsync(Parcel parcel);
 

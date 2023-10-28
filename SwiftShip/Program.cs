@@ -1,6 +1,10 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
 using SwiftShip.Data;
+using SwiftShip.Database;
+using SwiftShip.Service;
+using SwiftShip.BusinessLogic;
+using SwiftShip.BusinessLogic.Mapper;
+using DevExpress.XtraCharts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +12,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddScoped<IParcelBusinessLogic, ParcelBusinessLogic>();
+builder.Services.AddSingleton<IStageBusinessLogic, StageBusinessLogic>();
+builder.Services.AddAutoMapper(typeof(ParcelMapperProfile));
+builder.Services.AddDbServices();
+builder.Services.AddDevExpressBlazor();
+builder.Services.AddDbContext<SwiftShipDbContext>
+           (options => options.UseSqlServer(builder.Configuration.GetValue<string>("ConnectionString")));
 
 var app = builder.Build();
 

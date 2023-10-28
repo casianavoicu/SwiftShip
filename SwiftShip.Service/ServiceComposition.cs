@@ -4,7 +4,7 @@ namespace SwiftShip.Service
 {
     public static class ServiceComposition
     {
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        public static IServiceCollection AddDbServices(this IServiceCollection services)
         {
             return services.AddScoped<IParcelService, ParcelService>();
         }

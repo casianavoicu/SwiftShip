@@ -1,15 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SwiftShip.Database.Entities;
+using SwiftShip.Database.Enums;
 
 namespace SwiftShip.Database
 {
     public class SwiftShipDbContext : DbContext
     {
-        public SwiftShipDbContext(DbContextOptions options) : base(options)
+        public SwiftShipDbContext()
         {
         }
 
-        protected SwiftShipDbContext()
+        public SwiftShipDbContext(DbContextOptions<SwiftShipDbContext> options) : base(options)
         {
         }
 
@@ -20,5 +22,23 @@ namespace SwiftShip.Database
         public DbSet<StageHistory> StageHistory { get; set; }
 
         public DbSet<User> User { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder
+               .Entity<Stage>()
+               .Property(d => d.Description)
+               .HasConversion(new EnumToStringConverter<StageType>());
+
+            var values = Enum.GetValues(typeof(StageType))
+                           .Cast<object>()
+                           .Select(value => new Stage() { Description = (StageType)value, Id = (int)value })
+                           .ToList();
+
+            modelBuilder.Entity<Stage>().HasData(values);
+        }
     }
+
 }
