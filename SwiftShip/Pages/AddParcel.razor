@@ -1,4 +1,4 @@
-﻿@page "/addparcel"
+﻿@page "/updateparcel"
 @using DevExpress.Blazor;
 @using SwiftShip.BusinessLogic;
 @using SwiftShip.BusinessLogic.Models;
@@ -30,6 +30,8 @@
 
 </DxDataGrid>
 </DxLoadingPanel>
+
+
 @code {
     readonly TaskCompletionSource<ParcelModel> firstEmployeeTcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
     IEnumerable<ParcelModel> DataSource { get; set; }

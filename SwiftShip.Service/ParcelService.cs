@@ -34,12 +34,16 @@ namespace SwiftShip.Service
                 .Include(e => e.StageHistory)
                     .ThenInclude(e => e.Stage)
                 .Where(e => e.StageHistory.FirstOrDefault() != null)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
         public async Task<Parcel?> GetAsync(int id)
         {
-            return await _dbContext.Parcel.FirstOrDefaultAsync(e => e.Id == id);
+            return await _dbContext.Parcel
+                .Include(e => e.Customer)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task UpdateAsync(Parcel parcel)

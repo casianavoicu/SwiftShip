@@ -1,0 +1,153 @@
+﻿@page "/addparcel"
+@implements IDisposable
+@using SwiftShip.BusinessLogic;
+@using SwiftShip.BusinessLogic.Models;
+@using SwiftShip.Database.Enums;
+@inject IParcelBusinessLogic _parcelBusinessLogic
+@inject IStageBusinessLogic _stageBusinessLogic
+
+<DxGrid @ref="Grid"
+        Data="DataSource"
+        PageSize="12"
+        KeyFieldName="Id"
+        ValidationEnabled="false"
+        CustomizeEditModel="Grid_CustomizeEditModel"
+        EditModelSaving="Grid_EditModelSaving"
+        DataItemDeleting="Grid_DataItemDeleting"
+        PopupEditFormCssClass="pw-800"
+        EditMode="@CurrentEditMode">
+    <Columns>
+        <DxGridCommandColumn Width="160px" />
+        <DxGridDataColumn FieldName="Customer.FirstName" Caption="First Name" />
+        <DxGridDataColumn FieldName="Customer.LastName" Caption="Last Name" />
+        <DxGridDataColumn FieldName="Customer.EmailAddress" Caption="Email Address" />
+        <DxGridDataColumn FieldName="@nameof(ParcelModel.Identifier)" />
+       @*  <DxGridDataColumn FieldName="@nameof(ParcelModel.StageType)" /> *@
+    </Columns>
+    <EditFormTemplate Context="EditFormContext">
+        @{
+            var currentModel = (ParcelModel)EditFormContext.EditModel;
+        }
+        <DxFormLayout CssClass="w-100">
+            <DxFormLayoutItem Caption="First Name:" ColSpanMd="6">
+                @EditFormContext.GetEditor("Customer.FirstName")
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Last Name:" ColSpanMd="6">
+                @EditFormContext.GetEditor("Customer.LastName")
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="EmailAddress:" ColSpanMd="6">
+                @EditFormContext.GetEditor("Customer.EmailAddress")
+            </DxFormLayoutItem>
+         @*    <DxFormLayoutItem Caption="Stage Type:" ColSpanMd="6">
+                <DxComboBox Data="CurrentStages" @bind-Value="currentModel.StageType">
+            </DxComboBox> *@
+        @* </DxFormLayoutItem> *@
+        </DxFormLayout>
+    </EditFormTemplate>
+</DxGrid>
+
+@code {
+    IEnumerable<ParcelModel> DataSource { get; set; }
+    IGrid Grid { get; set; }
+    GridEditMode CurrentEditMode = GridEditMode.EditForm;
+    TaskCompletionSource<bool> DataLoadedTcs { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private StageType SelectedStage;
+    private List<StageType> CurrentStages = new List<StageType>();
+    private bool isComboBoxPopupVisible = false;
+    private DxPopup comboBoxPopup;
+
+    private List<StageType> filteredStages;
+
+    // void OnSelectedDataItemChanged(object newSelection)
+    // {
+    //     GetFilteredStages((newSelection as ParcelModel).StageType);
+    // }
+
+    // private void GetFilteredStages(StageType selectedStageType)
+    // {
+
+    //     var result = _stageBusinessLogic.GetStages
+    // }
+    protected override async Task OnInitializedAsync()
+    {
+        DataSource = await _parcelBusinessLogic.GetAllAsync();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            DataLoadedTcs.TrySetResult(true);
+    }
+
+    private void UpdateCurrentStages()
+    {
+        // Implement your filtering logic here based on the selected row's stageType.
+        // For example, filter based on a condition:
+        if (SelectedStage == StageType.Warehouse)
+        {
+            CurrentStages = new List<StageType> { StageType.Warehouse, StageType.InTransit };
+        }
+        else if (SelectedStage == StageType.InTransit)
+        {
+            CurrentStages = new List<StageType> { StageType.InTransit, StageType.Shipped };
+        }
+        else
+        {
+            CurrentStages = Enum.GetValues(typeof(StageType)).Cast<StageType>().ToList();
+        }
+    }
+
+
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var parcel = (ParcelModel)e.EditModel;
+        if (e.IsNew)
+            await _parcelBusinessLogic.AddAsync(parcel);
+        else
+            await _parcelBusinessLogic.UpdateAsync(parcel);
+        await UpdateDataAsync();
+    }
+    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    {
+        // await NwindDataService.RemoveEmployeeAsync((EditableEmployee)e.DataItem);
+        // await UpdateDataAsync();
+    }
+    async Task UpdateDataAsync()
+    {
+        DataSource = await _parcelBusinessLogic.GetAllAsync();
+    }
+
+    public void Dispose()
+    {
+        DataLoadedTcs.TrySetCanceled();
+    }
+
+    void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
+    {
+        if (e.IsNew)
+        {
+            var newEmployee = (ParcelModel)e.EditModel;
+            newEmployee.Customer = new CustomerModel();
+            newEmployee.StageType = StageType.Warehouse;
+        }
+        //GetFilteredStages(((ParcelModel)e.EditModel).StageType);
+    }
+
+    private List<StageType> GetFilteredStages()
+    {
+        // Implement your filtering logic here based on the selected row's stageType.
+        // For example, filter based on a condition:
+        if (SelectedStage == StageType.Warehouse)
+        {
+            return new List<StageType> { StageType.Warehouse, StageType.InTransit };
+        }
+        else if (SelectedStage == StageType.InTransit)
+        {
+            return new List<StageType> { StageType.InTransit, StageType.Shipped };
+        }
+        else
+        {
+            return CurrentStages;
+        }
+    }
+
+}

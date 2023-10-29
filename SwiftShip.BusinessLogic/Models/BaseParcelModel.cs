@@ -9,6 +9,8 @@ namespace SwiftShip.BusinessLogic.Models
         public CustomerModel Customer { get; set; }
 
         public StageType StageType { get; set; }
+
+        public string Address { get; set; } = string.Empty;
     }
 
     public class ParcelModel : BaseParcelModel

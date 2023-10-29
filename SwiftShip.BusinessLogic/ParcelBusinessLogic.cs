@@ -37,11 +37,12 @@ namespace SwiftShip.BusinessLogic
             {
                 new StageHistory
                 {
-                    Address = "sss",
-                    StageId = (int)parcelModel.StageType ,
+                    Address =  parcelModel.Address,
+                    StageId = (int)parcelModel.StageType,
                 }
             };
             mappedResult.Identifier = Guid.NewGuid();
+
             await _parcelService.AddAsync(mappedResult);
 
             if (mappedResult?.Id != null)
@@ -72,14 +73,17 @@ namespace SwiftShip.BusinessLogic
                 throw new ArgumentNullException("Cannot update object without identifier");
 
             //verify state
-            var mappedResult = _mapper.Map<Parcel>(parcelModel);
+            var dbParcel = await _parcelService.GetAsync(parcelModel.Id.Value);
+            if (dbParcel == null)
+            {
+                throw new Exception();
+            }
 
-            await _parcelService.UpdateAsync(mappedResult);
+             _mapper.Map(parcelModel, dbParcel);
 
-            if (mappedResult.Id != null)
-                return true;
+            await _parcelService.UpdateAsync(dbParcel);
 
-            return false;
+            return true;
         }
     }
 }
