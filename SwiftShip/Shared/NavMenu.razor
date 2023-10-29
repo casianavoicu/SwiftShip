@@ -1,44 +1,23 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">SwiftShip</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
-
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="addparcel">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Insert
-            </NavLink>
-        </div>
-          <div class="nav-item px-3">
-            <NavLink class="nav-link" href="parceltracking">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Parcel Tracking
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="customertracker">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> customertracker
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
+﻿<DxMenu Title="DevExpress"
+        CollapseItemsToHamburgerMenu="false"
+        CollapseItemToIconMode="MenuCollapseItemToIconMode.Sequentially"
+        DisplayMode="MenuDisplayMode.Desktop"
+       >
+    <Items>
+        <DxMenuItem Text="Home" IconCssClass="menu-icon-home menu-icon" NavigateUrl="">
+        </DxMenuItem>
+        <DxMenuItem Text="Parcel Management" IconCssClass="menu-icon-products menu-icon">
+            <Items>
+                <DxMenuItem Text="Register new parcel" NavigateUrl="addparcel" />
+                <DxMenuItem Text="Parcel Tracking" NavigateUrl="parceltracking" />
+            </Items>
+        </DxMenuItem>
+        <DxMenuItem Text="Support" IconCssClass="menu-icon-support menu-icon">
+            <Items>
+                <DxMenuItem Text="Check your parcel" NavigateUrl="/customertracker" />
+            </Items>
+        </DxMenuItem>
+        <DxMenuItem Text="Contacts" IconCssClass="menu-icon-contacts menu-icon" />
+        <DxMenuItem Text="About" IconCssClass="menu-icon-about menu-icon" />
+    </Items>
+</DxMenu>
