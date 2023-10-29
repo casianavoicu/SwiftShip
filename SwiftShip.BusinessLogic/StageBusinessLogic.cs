@@ -1,5 +1,4 @@
 ﻿using SwiftShip.Database.Enums;
-using System.Security.AccessControl;
 
 namespace SwiftShip.BusinessLogic
 {
@@ -31,13 +30,13 @@ namespace SwiftShip.BusinessLogic
 
         public bool IsCurrentStageCorrectBasedOnPrevious(StageType existing, StageType current)
         {
-           var stageBasedOnExisting = StageRules[existing];
+           var stageBasedOnExisting = StageOptions[existing];
            return stageBasedOnExisting.Contains(current);
         }
 
-        public Dictionary<StageType, List<StageType>> GetStageOptions(StageType stageType)
+        public List<StageType> GetStageOptions(StageType stageType)
         {
-            return StageRules;
+            return StageRules[stageType];
         }
     }
 }

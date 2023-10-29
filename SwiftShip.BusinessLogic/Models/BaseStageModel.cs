@@ -1,11 +1,13 @@
-﻿namespace SwiftShip.BusinessLogic.Models
+﻿using SwiftShip.Database.Enums;
+
+namespace SwiftShip.BusinessLogic.Models
 {
     public class BaseStageModel
     {
-        public string Description { get; set; }
-
-        public DateTime Date { get; set; }
-
         public string Address { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public StageType Stage { get; set; }
     }
 }

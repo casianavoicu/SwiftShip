@@ -22,6 +22,23 @@ namespace SwiftShip.BusinessLogic.Mapper
             CreateMap<CustomerModel, Customer>();
 
             CreateMap<Customer, CustomerModel>();
+
+            CreateMap<Parcel, CustomerParcelModel>()
+                .ForMember(e => e.Stages, o => o.MapFrom(s => s.StageHistory));
+
+            CreateMap<StageHistory, BaseStageModel>()
+                .ForMember(e => e.Stage, o => o.MapFrom(s => (StageType)s.StageId));
+
+            CreateMap<ParcelStageModel, StageHistory>()
+                .ForMember(e => e.CreatedBy, o => o.MapFrom(s => "admin"))
+                .ForMember(e => e.ParcelId, o => o.MapFrom(s => s.Id))
+                .ForMember(e => e.Id, o => o.Ignore())
+                .ForMember(e => e.StageId, o => o.MapFrom(s => (int)s.Stage))
+                .ForMember(e => e.Stage, o => o.Ignore());
+
+            CreateMap<Parcel, ParcelStageModel>()
+                .ForMember(e => e.Stage, o => o.MapFrom(s => (StageType)s.StageHistory!.OrderByDescending(x => x.CreatedDate).First().StageId))
+                .ForMember(e => e.Address, o => o.MapFrom(s => s.StageHistory.First().Address));
         }
     }
 }

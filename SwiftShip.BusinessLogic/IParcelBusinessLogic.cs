@@ -10,6 +10,8 @@ namespace SwiftShip.BusinessLogic
 
         Task<bool> UpdateAsync(BaseParcelModel parcelModel);
 
-        Task<CustomerParcelModel> GetAsync(int id);
+        Task<CustomerParcelModel> GetAsync(Guid guid);
+
+        Task<List<CustomerModel>> GetByIdentifier(Guid guid);
     }
 }

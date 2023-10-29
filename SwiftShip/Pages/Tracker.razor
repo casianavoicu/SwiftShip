@@ -1,0 +1,36 @@
+﻿@using SwiftShip.BusinessLogic.Models;
+
+<div class="cw-480 demo-preventsel">
+    <div class="e-details">
+       Your parcel with identity @Data.Identifier was registered at @Data.RegisteredDate
+    </div>
+    <DxAccordion ExpandMode="ExpandMode"
+        ExpandCollapseAction="ExpandCollapseAction"
+        AnimationType="LayoutAnimationType.Slide">
+        <Items>
+            @foreach (var (item, i) in Items)
+            {
+                <DxAccordionItem Text=@(item.Stage.ToString()) Expanded=@(i == 0)>
+                    <ContentTemplate>
+                         <div class="py-3 px-3">
+                            <DetailedTrack Stage="@item" />
+                        </div>
+                    </ContentTemplate>
+                </DxAccordionItem>
+            }
+        </Items>
+    </DxAccordion>
+</div>
+
+@code {
+    [Parameter]
+    public CustomerParcelModel Data { get; set; }
+    IEnumerable<(BaseStageModel, int)> Items;
+    AccordionExpandMode ExpandMode { get; set; } = AccordionExpandMode.SingleOrNone;
+    AccordionExpandCollapseAction ExpandCollapseAction { get; set; } = AccordionExpandCollapseAction.HeaderClick;
+    protected override async Task OnInitializedAsync()
+    {
+        Items = Data.Stages.Select((item, index) => (item, index));
+        await base.OnInitializedAsync();
+    }
+}

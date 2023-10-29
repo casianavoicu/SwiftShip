@@ -2,12 +2,10 @@
 {
     public class CustomerParcelModel
     {
-        public string? Id { get; set; }
-
+        public int Id { get; set; }
         public DateTime RegisteredDate { get; set; }
 
-        public DateTime EndDate { get; set; }
-
         public List<BaseStageModel> Stages { get; set; }
+        public Guid Identifier { get; set; }
     }
 }

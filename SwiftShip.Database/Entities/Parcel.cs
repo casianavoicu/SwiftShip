@@ -15,7 +15,7 @@ namespace SwiftShip.Database.Entities
         public DateTime EndDate { get; set; }
 
         [InverseProperty("Parcel")]
-        public ICollection<StageHistory>? StageHistory { get; set; }
+        public ICollection<StageHistory> StageHistory { get; set; }
 
         [ForeignKey("CustomerId")]
         [InverseProperty("Parcel")]

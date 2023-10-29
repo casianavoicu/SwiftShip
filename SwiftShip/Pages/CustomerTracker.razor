@@ -1,0 +1,36 @@
+﻿@page "/customertracker"
+
+@using SwiftShip.BusinessLogic;
+@using SwiftShip.BusinessLogic.Models;
+@inject IParcelBusinessLogic _parcelBusinessLogic
+
+<h3>CustomerTracker</h3>
+<div class="d-flex py-2">
+    <DxTextBox @bind-Text="SearchText" />
+    <DxButton Text="Apply" Click="Search" CssClass="mx-2" />
+</div>
+@if (SearchText != null && Data != null)
+{
+    <Tracker Data="Data" />
+}
+
+@code {
+    string SearchText { get; set; } = "	24a0296f-fd89-45f7-ac8e-9c475350d894";
+    private CustomerParcelModel Data;
+
+    private async Task Search()
+    {
+        Guid guid;
+        if (Guid.TryParse(SearchText, out guid))
+        {
+            Console.WriteLine(guid);
+        }
+        else
+        {
+            Console.WriteLine("Invalid GUID format");
+        }
+        var result = await _parcelBusinessLogic.GetAsync(guid);
+        Data = result;
+        StateHasChanged();
+    }
+}

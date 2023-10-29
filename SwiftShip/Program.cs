@@ -13,6 +13,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<IParcelBusinessLogic, ParcelBusinessLogic>();
+builder.Services.AddScoped<IParcelStageHistoryBusinessLogic, ParcelStageHistoryBusinessLogic>();
 builder.Services.AddSingleton<IStageBusinessLogic, StageBusinessLogic>();
 builder.Services.AddAutoMapper(typeof(ParcelMapperProfile));
 builder.Services.AddDbServices();

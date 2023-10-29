@@ -1,0 +1,43 @@
+﻿@using SwiftShip.BusinessLogic.Models;
+
+<div class="e-card">
+   
+       @*  <div class="e-divider my-3"></div>
+        @if (CustomDetails)
+        {
+            <div class="e-details">
+                @RenderDetailsItem("e-icon-address", nameof(BaseStageModel.Address), Stage.Address)
+            </div>
+        }
+        else
+        { *@
+            <DxFormLayout CssClass="e-details">
+                <DxFormLayoutItem>
+                    @RenderDetailsItem("e-icon-address", nameof(BaseStageModel.Address), Stage.Address)
+                </DxFormLayoutItem>
+                <DxFormLayoutItem>
+                    @RenderDetailsItem("e-icon-birthdate", nameof(BaseStageModel.CreatedDate), Stage.CreatedDate.ToShortDateString())
+                </DxFormLayoutItem>
+            </DxFormLayout>
+        @* } *@
+</div>
+
+@code {
+    [Parameter] public BaseStageModel Stage { get; set; }
+    public bool Detailed { get; set; } = true;
+     public bool CustomDetails { get; set; } = true;
+
+    RenderFragment RenderDetailsItem(string iconCssClass, string caption, string value)
+    {
+        return
+    @<div class="d-flex align-items-center">
+        <div class="icon-container flex-shrink-0">
+            <span class="e-icon @iconCssClass"></span>
+        </div>
+        <div class="text-container flex-grow-1 ms-2">
+            <label>@caption:</label>
+            <div>@value</div>
+        </div>
+    </div>;
+    }
+}

@@ -6,7 +6,9 @@ namespace SwiftShip.Service
     {
         public static IServiceCollection AddDbServices(this IServiceCollection services)
         {
-            return services.AddScoped<IParcelService, ParcelService>();
+            return services.AddScoped<IParcelService, ParcelService>()
+                           .AddScoped<IStageService, StageService>();
+
         }
     }
 }

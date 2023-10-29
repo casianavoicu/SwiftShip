@@ -51,9 +51,9 @@ namespace SwiftShip.BusinessLogic
             return false;
         }
 
-        public async Task<CustomerParcelModel> GetAsync(int id)
+        public async Task<CustomerParcelModel> GetAsync(Guid id)
         {
-            var result = await _parcelService.GetAsync(id);
+            var result = await _parcelService.GetAsync(e => e.Identifier == id);
             if (result == null)
                 throw new Exception("Parcel not found");
 
@@ -73,7 +73,7 @@ namespace SwiftShip.BusinessLogic
                 throw new ArgumentNullException("Cannot update object without identifier");
 
             //verify state
-            var dbParcel = await _parcelService.GetAsync(parcelModel.Id.Value);
+            var dbParcel = await _parcelService.GetAsync(e => e.Id == parcelModel.Id.Value);
             if (dbParcel == null)
             {
                 throw new Exception();
@@ -84,6 +84,11 @@ namespace SwiftShip.BusinessLogic
             await _parcelService.UpdateAsync(dbParcel);
 
             return true;
+        }
+
+        public Task<List<CustomerModel>> GetByIdentifier(Guid guid)
+        {
+            throw new NotImplementedException();
         }
     }
 }
