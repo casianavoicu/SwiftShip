@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using SwiftShip.BusinessLogic.Models;
+using SwiftShip.BusinessLogic.Utils;
 using SwiftShip.Database.Entities;
 using SwiftShip.Database.Enums;
 using SwiftShip.Service;
 
-namespace SwiftShip.BusinessLogic
+namespace SwiftShip.BusinessLogic.BusinessLogic
 {
-    public class ParcelStageHistoryBusinessLogic : IParcelStageHistoryBusinessLogic
+    sealed internal class ParcelStageHistoryBusinessLogic : IParcelStageHistoryBusinessLogic
     {
         private readonly IParcelService _parcelService;
         private readonly IMapper _mapper;

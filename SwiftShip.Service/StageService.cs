@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SwiftShip.Database;
+﻿using SwiftShip.Database;
 using SwiftShip.Database.Entities;
 
 namespace SwiftShip.Service
 {
-    internal class StageService : IStageService
+    sealed internal class StageService : IStageService
     {
         private readonly SwiftShipDbContext _dbContext;
 

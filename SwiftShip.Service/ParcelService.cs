@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace SwiftShip.Service
 {
-    internal class ParcelService : IParcelService
+    sealed internal class ParcelService : IParcelService
     {
         private readonly SwiftShipDbContext _dbContext;
 

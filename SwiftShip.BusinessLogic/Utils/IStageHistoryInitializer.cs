@@ -1,6 +1,6 @@
 ﻿using SwiftShip.Database.Entities;
 
-namespace SwiftShip.BusinessLogic
+namespace SwiftShip.BusinessLogic.Utils
 {
     public interface IStageHistoryInitializer
     {

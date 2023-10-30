@@ -1,8 +1,8 @@
 ﻿using SwiftShip.Database.Enums;
 
-namespace SwiftShip.BusinessLogic
+namespace SwiftShip.BusinessLogic.Utils
 {
-    public class StageHandler : IStageHandler
+    sealed internal class StageHandler : IStageHandler
     {
         private readonly Dictionary<StageType, List<StageType>> StageRules = new Dictionary<StageType, List<StageType>>()
         {
@@ -12,14 +12,14 @@ namespace SwiftShip.BusinessLogic
         };
 
         public bool IsInitial(StageType stageType)
-        { 
+        {
             return stageType == StageType.Warehouse;
         }
 
         public bool IsCurrentStageCorrectBasedOnPrevious(StageType existing, StageType current)
         {
-           var stageBasedOnExisting = StageRules[existing];
-           return stageBasedOnExisting.Contains(current);
+            var stageBasedOnExisting = StageRules[existing];
+            return stageBasedOnExisting.Contains(current);
         }
 
         public List<StageType> GetStageOptions(StageType stageType)

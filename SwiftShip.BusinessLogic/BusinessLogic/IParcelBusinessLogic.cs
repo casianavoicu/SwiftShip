@@ -1,6 +1,6 @@
 ﻿using SwiftShip.BusinessLogic.Models;
 
-namespace SwiftShip.BusinessLogic
+namespace SwiftShip.BusinessLogic.BusinessLogic
 {
     public interface IParcelBusinessLogic
     {

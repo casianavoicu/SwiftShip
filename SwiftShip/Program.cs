@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using SwiftShip.BusinessLogic;
 using SwiftShip.BusinessLogic.Mapper;
+using SwiftShip.BusinessLogic.Utils;
 using SwiftShip.Database;
 using SwiftShip.Service;
 
@@ -9,12 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddTransient<IParcelBusinessLogic, ParcelBusinessLogic>();
-builder.Services.AddTransient<IStageHistoryInitializer, StageHistoryInitializer>();
-builder.Services.AddTransient<IParcelStageHistoryBusinessLogic, ParcelStageHistoryBusinessLogic>();
-builder.Services.AddSingleton<IStageHandler, StageHandler>();
-builder.Services.AddAutoMapper(typeof(ParcelMapperProfile));
+builder.Services.AddBusinessServices();
 builder.Services.AddDbServices();
+builder.Services.AddAutoMapper(typeof(ParcelMapperProfile));
 builder.Services.AddDevExpressBlazor();
 builder.WebHost.UseWebRoot("wwwroot");
 builder.Services.Configure<DevExpress.Blazor.Configuration.GlobalOptions>(options => {

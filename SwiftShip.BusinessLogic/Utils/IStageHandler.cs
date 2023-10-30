@@ -1,6 +1,6 @@
 ﻿using SwiftShip.Database.Enums;
 
-namespace SwiftShip.BusinessLogic
+namespace SwiftShip.BusinessLogic.Utils
 {
     public interface IStageHandler
     {

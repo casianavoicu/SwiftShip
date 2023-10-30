@@ -1,20 +1,21 @@
 ﻿using AutoMapper;
 using SwiftShip.BusinessLogic.Models;
+using SwiftShip.BusinessLogic.Utils;
 using SwiftShip.Database.Entities;
 using SwiftShip.Service;
 
-namespace SwiftShip.BusinessLogic
+namespace SwiftShip.BusinessLogic.BusinessLogic
 {
-    public class ParcelBusinessLogic : IParcelBusinessLogic
+    sealed internal class ParcelBusinessLogic : IParcelBusinessLogic
     {
         private readonly IParcelService _parcelService;
         private readonly IMapper _mapper;
         private readonly IStageHandler _stageBusinessLogic;
         private readonly IStageHistoryInitializer _stageHistoryInitializer;
 
-        public ParcelBusinessLogic(IParcelService parcelService, 
-            IMapper mapper, 
-            IStageHandler stageBusinessLogic, 
+        public ParcelBusinessLogic(IParcelService parcelService,
+            IMapper mapper,
+            IStageHandler stageBusinessLogic,
             IStageHistoryInitializer stageHistoryInitializer)
         {
             _parcelService = parcelService;
@@ -80,13 +81,13 @@ namespace SwiftShip.BusinessLogic
                 throw new ArgumentNullException("Cannot update object without identifier");
 
             var dbParcel = await _parcelService.GetOrderedAsync(e => e.Id == parcelModel.Id.Value);
-            
+
             if (dbParcel == null)
             {
                 throw new Exception();
             }
 
-             _mapper.Map(parcelModel, dbParcel);
+            _mapper.Map(parcelModel, dbParcel);
 
             await _parcelService.UpdateAsync(dbParcel);
 
