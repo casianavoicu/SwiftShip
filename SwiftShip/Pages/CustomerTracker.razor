@@ -6,17 +6,20 @@
 
 <h3>CustomerTracker</h3>
 <div class="d-flex py-2">
-    <DxTextBox @bind-Text="SearchText" />
+    <div class="my-style">
+    <DxTextBox @bind-Text="SearchText" SizeMode="SizeMode.Medium" />
+    </div>
     <DxButton Text="Apply" Click="Search" CssClass="mx-2" />
 </div>
+
 @if (SearchText != null && Data != null)
 {
     <Tracker Data="Data" />
 }
 
 @code {
-    string SearchText { get; set; } = "	24a0296f-fd89-45f7-ac8e-9c475350d894";
-    private CustomerParcelModel Data;
+    string? SearchText { get; set; }
+    private CustomerParcelModel? Data;
 
     private async Task Search()
     {

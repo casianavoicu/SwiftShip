@@ -1,9 +1,11 @@
 ﻿@using SwiftShip.BusinessLogic.Models;
 
 <div class="cw-480 demo-preventsel">
+    <br />
     <div class="e-details">
        Your parcel with identity @Data.Identifier was registered at @Data.RegisteredDate
     </div>
+    <br/>
     <DxAccordion ExpandMode="ExpandMode"
         ExpandCollapseAction="ExpandCollapseAction"
         AnimationType="LayoutAnimationType.Slide">
@@ -25,8 +27,8 @@
 @code {
     [Parameter]
     public CustomerParcelModel Data { get; set; }
-    IEnumerable<(BaseStageModel, int)> Items;
-    AccordionExpandMode ExpandMode { get; set; } = AccordionExpandMode.SingleOrNone;
+    IEnumerable<(BaseStageHistoryModel, int)> Items;
+    AccordionExpandMode ExpandMode { get; set; } = AccordionExpandMode.Multiple;
     AccordionExpandCollapseAction ExpandCollapseAction { get; set; } = AccordionExpandCollapseAction.HeaderClick;
     protected override async Task OnInitializedAsync()
     {

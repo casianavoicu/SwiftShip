@@ -3,16 +3,16 @@
 <div class="e-card">
    <DxFormLayout CssClass="e-details">
        <DxFormLayoutItem>
-           @RenderDetailsItem("e-icon-address", nameof(BaseStageModel.Address), Stage.Address)
+            @RenderDetailsItem("e-icon-address", nameof(BaseStageHistoryModel.Address), Stage.Address)
        </DxFormLayoutItem>
        <DxFormLayoutItem>
-           @RenderDetailsItem("e-icon-birthdate", nameof(BaseStageModel.CreatedDate), Stage.CreatedDate.ToShortDateString())
+            @RenderDetailsItem("e-icon-birthdate", nameof(BaseStageHistoryModel.CreatedDate), Stage.CreatedDate.ToShortDateString())
        </DxFormLayoutItem>
    </DxFormLayout>
 </div>
 
 @code {
-    [Parameter] public BaseStageModel Stage { get; set; }
+    [Parameter] public BaseStageHistoryModel Stage { get; set; }
     public bool Detailed { get; set; } = true;
      public bool CustomDetails { get; set; } = true;
 

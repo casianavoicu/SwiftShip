@@ -21,8 +21,10 @@ namespace SwiftShip.Service
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Parcel parcel)
+        public async Task RemoveAsync(Parcel parcel)
         {
+            _dbContext.Customer.Remove(parcel.Customer);
+
             _dbContext.Parcel.Remove(parcel);
 
             await _dbContext.SaveChangesAsync();
@@ -38,9 +40,14 @@ namespace SwiftShip.Service
                 .ToListAsync();
         }
 
-        public async Task<Parcel?> GetAsync(Expression<Func<Parcel, bool>> expression)
+        public async Task<Parcel?> GetBaseAsync(int id)
         {
-            return await _dbContext.Parcel.AsNoTracking()
+            return await _dbContext.Parcel.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Parcel?> GetOrderedAsync(Expression<Func<Parcel, bool>> expression)
+        {
+            return await _dbContext.Parcel
                 .Include(e => e.Customer)
                  .Include(e => e.StageHistory)
                     .ThenInclude(e => e.Stage)

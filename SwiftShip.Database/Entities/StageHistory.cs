@@ -10,8 +10,6 @@ namespace SwiftShip.Database.Entities
 
         public DateTime CreatedDate { get; set; }
 
-        public string CreatedBy { get; set; } = string.Empty;
-
         [ForeignKey("StageId")]
         public Stage Stage { get; set; }
 

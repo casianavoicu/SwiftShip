@@ -1,8 +1,10 @@
-﻿using SwiftShip.Database.Enums;
+﻿using SwiftShip.BusinessLogic.Models;
+using SwiftShip.Database.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace SwiftShip.BusinessLogic.Models
 {
-    public class BaseParcelModel
+    public class ParcelModel
     {
         public int? Id { get; set; }
 
@@ -10,11 +12,9 @@ namespace SwiftShip.BusinessLogic.Models
 
         public StageType StageType { get; set; }
 
-        public string Address { get; set; } = string.Empty;
-    }
+        [Required]
+        public string Address { get; set; }
 
-    public class ParcelModel : BaseParcelModel
-    {
         public Guid Identifier { get; set; }
 
         public DateTime RegisteredDate { get; set; }

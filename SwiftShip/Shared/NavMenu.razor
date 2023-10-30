@@ -1,23 +1,23 @@
-﻿<DxMenu Title="DevExpress"
-        CollapseItemsToHamburgerMenu="false"
-        CollapseItemToIconMode="MenuCollapseItemToIconMode.Sequentially"
-        DisplayMode="MenuDisplayMode.Desktop"
-       >
-    <Items>
-        <DxMenuItem Text="Home" IconCssClass="menu-icon-home menu-icon" NavigateUrl="">
-        </DxMenuItem>
-        <DxMenuItem Text="Parcel Management" IconCssClass="menu-icon-products menu-icon">
-            <Items>
-                <DxMenuItem Text="Register new parcel" NavigateUrl="addparcel" />
-                <DxMenuItem Text="Parcel Tracking" NavigateUrl="parceltracking" />
-            </Items>
-        </DxMenuItem>
-        <DxMenuItem Text="Support" IconCssClass="menu-icon-support menu-icon">
-            <Items>
-                <DxMenuItem Text="Check your parcel" NavigateUrl="/customertracker" />
-            </Items>
-        </DxMenuItem>
-        <DxMenuItem Text="Contacts" IconCssClass="menu-icon-contacts menu-icon" />
-        <DxMenuItem Text="About" IconCssClass="menu-icon-about menu-icon" />
-    </Items>
-</DxMenu>
+﻿<div class="sidebar @StateCssClass">
+    <DxTreeView AllowSelectNodes="true" CssClass="app-sidebar">
+        <Nodes>
+            <DxTreeViewNode NavigateUrl="./" Text="Overview" CssClass="@rootNodeCssClass" IconCssClass="menu-icon-home menu-icon"></DxTreeViewNode>
+            <DxTreeViewNode Text="Parcel Management" CssClass="@rootNodeCssClass" IconCssClass="menu-icon-products menu-icon">
+                <Nodes>
+                    <DxTreeViewNode Text="Manage Parcels" NavigateUrl="/parceldetails" />
+                    <DxTreeViewNode Text="Parcel Tracking" NavigateUrl="/parceltracking" />
+                </Nodes>
+            </DxTreeViewNode>
+            <DxTreeViewNode Text="Support" CssClass="@rootNodeCssClass" IconCssClass="menu-icon-support menu-icon">
+                <Nodes>
+                    <DxTreeViewNode Text="Check your parcel" NavigateUrl="/customertracker" />
+                </Nodes>
+            </DxTreeViewNode>
+        </Nodes>
+    </DxTreeView>
+</div>
+
+@code {
+    const string rootNodeCssClass = "root-item";
+    [Parameter] public string? StateCssClass { get; set; }
+}

@@ -4,7 +4,7 @@
 @using SwiftShip.BusinessLogic;
 @using SwiftShip.Database.Enums;
 @inject IParcelStageHistoryBusinessLogic _parcelStageBusinessLogic
-@inject IStageBusinessLogic _stageBusinessLogic
+@inject IStageHandler _stageBusinessLogic
 
 <DxGrid @ref="Grid"
         Data="DataSource"
@@ -14,24 +14,30 @@
         CustomizeEditModel="Grid_CustomizeEditModel"
         EditModelSaving="Grid_EditModelSaving"
         PopupEditFormCssClass="pw-800"
+        SelectionMode="GridSelectionMode.Single"
         EditMode="@CurrentEditMode">
     <Columns>
         <DxGridCommandColumn Width="160px" NewButtonVisible="false" DeleteButtonVisible="false" />
         <DxGridDataColumn FieldName="@nameof(ParcelStageModel.Identifier)" />
         <DxGridDataColumn FieldName="@nameof(ParcelStageModel.Stage)" />
-        <DxGridDataColumn FieldName="@nameof(ParcelStageModel.Address)" />
+        <DxGridDataColumn FieldName="@nameof(ParcelStageModel.Address)" ReadOnly=IsAddressInEditMode />
     </Columns>
     <EditFormTemplate Context="EditFormContext">
         @{
             var currentModel = (ParcelStageModel)EditFormContext.EditModel;
         }
         <DxFormLayout CssClass="w-100">
-            <DxFormLayoutItem Caption="Address:" ColSpanMd="6">
+            <DxFormLayoutItem Caption="Address:" ColSpanMd="6" >
                 @EditFormContext.GetEditor("Address")
             </DxFormLayoutItem>
 
             <DxFormLayoutItem Caption="State" ColSpanMd="6">
-                <DxComboBox Data="CurrentStages" @bind-Value="currentModel.Stage" Enabled="@isDropDownVisible" SelectedItemChanged="@((StageType city) => OnItemChanged(city))">
+                <DxComboBox Data="CurrentStages" @bind-Value="currentModel.Stage" Enabled="@isDropDownVisible" 
+                SelectedItemChanged="@((StageType stage) => 
+                    {
+                    currentModel.Address = ""; 
+                    OnItemChanged(stage);
+                    })">
                 </DxComboBox>
             </DxFormLayoutItem>
         </DxFormLayout>
@@ -40,13 +46,13 @@
 
 @code {
     IEnumerable<ParcelStageModel> DataSource { get; set; }
-    IGrid Grid { get; set; }
+    IGrid? Grid { get; set; }
     GridEditMode CurrentEditMode = GridEditMode.EditForm;
     TaskCompletionSource<bool> DataLoadedTcs { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private StageType SelectedStage;
     private List<StageType> CurrentStages = new List<StageType>();
-    private bool isComboBoxPopupVisible = false;
     private bool isDropDownVisible = true;
+    public bool IsAddressInEditMode { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -58,16 +64,20 @@
         DataLoadedTcs.TrySetCanceled();
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            DataLoadedTcs.TrySetResult(true);
+    }
+
     void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
     {
         var model = (ParcelStageModel)e.EditModel;
-        if (string.IsNullOrEmpty(model.Address))
-            isDropDownVisible = false;
-        else
-        {
-            isDropDownVisible = true;
-            GetFilteredStages(((ParcelStageModel)e.EditModel).Stage);
-        }
+
+        isDropDownVisible = true;
+        IsAddressInEditMode = true;
+        GetFilteredStages(((ParcelStageModel)e.EditModel).Stage);
+
     }
 
     async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
@@ -77,11 +87,6 @@
         await UpdateDataAsync();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-            DataLoadedTcs.TrySetResult(true);
-    }
 
     private void GetFilteredStages(StageType selectedStageType)
     {
@@ -90,12 +95,13 @@
 
     private void OnItemChanged(StageType newSelection)
     {
-        //currentModel.Address = "";
         isDropDownVisible = false;
+        IsAddressInEditMode = false;
     }
 
     async Task UpdateDataAsync()
     {
         DataSource = await _parcelStageBusinessLogic.GetAllAsync();
     }
+   
 }

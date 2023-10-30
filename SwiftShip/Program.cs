@@ -9,16 +9,21 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddScoped<IParcelBusinessLogic, ParcelBusinessLogic>();
-builder.Services.AddScoped<IParcelStageHistoryBusinessLogic, ParcelStageHistoryBusinessLogic>();
-builder.Services.AddSingleton<IStageBusinessLogic, StageBusinessLogic>();
+builder.Services.AddTransient<IParcelBusinessLogic, ParcelBusinessLogic>();
+builder.Services.AddTransient<IStageHistoryInitializer, StageHistoryInitializer>();
+builder.Services.AddTransient<IParcelStageHistoryBusinessLogic, ParcelStageHistoryBusinessLogic>();
+builder.Services.AddSingleton<IStageHandler, StageHandler>();
 builder.Services.AddAutoMapper(typeof(ParcelMapperProfile));
 builder.Services.AddDbServices();
 builder.Services.AddDevExpressBlazor();
-//builder.WebHost.UseWebRoot("wwwroot");
-//builder.WebHost.UseStaticWebAssets();
+builder.WebHost.UseWebRoot("wwwroot");
+builder.Services.Configure<DevExpress.Blazor.Configuration.GlobalOptions>(options => {
+    options.BootstrapVersion = DevExpress.Blazor.BootstrapVersion.v5;
+    options.SizeMode = DevExpress.Blazor.SizeMode.Medium;
+});
+builder.WebHost.UseStaticWebAssets();
 builder.Services.AddDbContext<SwiftShipDbContext>
-           (options => options.UseSqlServer(builder.Configuration.GetValue<string>("ConnectionString")));
+           (options => options.UseSqlServer(builder.Configuration.GetValue<string>("ConnectionString")), ServiceLifetime.Transient);
 
 var app = builder.Build();
 

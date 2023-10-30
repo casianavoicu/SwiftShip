@@ -1,32 +1,53 @@
-.menu-icon {
-    width: 1rem;
-    height: 1rem;
-    min-width: 1rem;
-    min-height: 1rem;
-    background-size: contain;
-    mask-repeat: no-repeat;
-    -webkit-mask-repeat: no-repeat;
-    background-position: center center;
-    background-color: currentColor;
-    opacity: 0.7;
+.sidebar {
+    min-width: 300px;
+    max-width: 300px;
+    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.16);
+    transition: transform 0.1s ease-out;
+    height: 100%;
+    max-height: 100%;
+    overflow: auto;
+    background-color: var(--bs-body-bg, var(--dxbl-body-bg, #fff));
 }
 
-.menu-icon-home {
-    mask-image: url("../images/icons/home.svg");
-    -webkit-mask-image: url("../images/icons/home.svg");
+    .sidebar.collapse {
+        display: none;
+    }
+
+    .sidebar.expand {
+        display: block;
+    }
+
+@media (max-width: 1199.98px) {
+    .sidebar {
+        display: none;
+    }
+
+        .sidebar.expand {
+            position: fixed;
+            top: 3.5rem;
+            left: 0;
+            height: auto;
+            min-width: 100%;
+            z-index: 1050;
+        }
 }
 
-.menu-icon-support {
-    mask-image: url("../images/icons/support.svg");
-    -webkit-mask-image: url("../images/icons/support.svg");
+::deep .app-sidebar {
+    --dxbl-treeview-spacing-x: 0.5rem;
+    --dxbl-treeview-spacing-y: 1rem;
 }
 
-.menu-icon-contacts {
-    mask-image: url("../images/icons/contacts.svg");
-    -webkit-mask-image: url("../images/icons/contacts.svg");
+    ::deep .app-sidebar .root-item > :first-child {
+        --dxbl-treeview-font-weight: 400;
+    }
+
+    ::deep .app-sidebar .root-item > :only-child:not(.dxbl-treeview-tmpl) > button {
+        display: none;
+    }
+
+@media (max-width: 1199.98px) {
+    ::deep .app-sidebar {
+        padding-bottom: 0;
+    }
 }
 
-.menu-icon-about {
-    mask-image: url("../images/icons/about.svg");
-    -webkit-mask-image: url("../images/icons/about.svg");
-}

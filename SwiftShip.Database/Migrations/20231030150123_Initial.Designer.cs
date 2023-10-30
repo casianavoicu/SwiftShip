@@ -12,7 +12,7 @@ using SwiftShip.Database;
 namespace SwiftShip.Database.Migrations
 {
     [DbContext(typeof(SwiftShipDbContext))]
-    [Migration("20231028163531_Initial")]
+    [Migration("20231030150123_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -71,7 +71,8 @@ namespace SwiftShip.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
 
                     b.ToTable("Parcel");
                 });
@@ -144,40 +145,11 @@ namespace SwiftShip.Database.Migrations
                     b.ToTable("StageHistory");
                 });
 
-            modelBuilder.Entity("SwiftShip.Database.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("User");
-                });
-
             modelBuilder.Entity("SwiftShip.Database.Entities.Parcel", b =>
                 {
                     b.HasOne("SwiftShip.Database.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
+                        .WithOne("Parcel")
+                        .HasForeignKey("SwiftShip.Database.Entities.Parcel", "CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -201,6 +173,12 @@ namespace SwiftShip.Database.Migrations
                     b.Navigation("Parcel");
 
                     b.Navigation("Stage");
+                });
+
+            modelBuilder.Entity("SwiftShip.Database.Entities.Customer", b =>
+                {
+                    b.Navigation("Parcel")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SwiftShip.Database.Entities.Parcel", b =>

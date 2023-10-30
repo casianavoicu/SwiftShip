@@ -10,11 +10,11 @@ namespace SwiftShip.BusinessLogic
     {
         private readonly IParcelService _parcelService;
         private readonly IMapper _mapper;
-        private readonly IStageBusinessLogic _stageBusinessLogic;
+        private readonly IStageHandler _stageBusinessLogic;
         private readonly IStageService _stageService;
 
         public ParcelStageHistoryBusinessLogic(IParcelService parcelService, IMapper mapper,
-            IStageService stageService, IStageBusinessLogic stageBusinessLogic)
+            IStageService stageService, IStageHandler stageBusinessLogic)
         {
             _parcelService = parcelService;
             _mapper = mapper;
@@ -35,31 +35,23 @@ namespace SwiftShip.BusinessLogic
         {
             var dbParcel = await _parcelService.GetExtendedAsync(parcelStageModel.Id);
 
-            if(dbParcel == null)
+            if (dbParcel == null)
                 throw new ArgumentNullException();
 
             var currentStageHistory = dbParcel.StageHistory.OrderByDescending(x => x.CreatedDate).First();
             var currentStage = (StageType)currentStageHistory.StageId;
 
             var nextStage = _stageBusinessLogic
-                .IsCurrentStageCorrectBasedOnPrevious(currentStage, 
+                .IsCurrentStageCorrectBasedOnPrevious(currentStage,
                 parcelStageModel.Stage);
 
             if (nextStage == false)
                 throw new Exception();
 
-            if (currentStage == parcelStageModel.Stage)
-            {
-                _mapper.Map(parcelStageModel, currentStageHistory);
-                currentStageHistory.CreatedDate = DateTime.UtcNow;
-                await _stageService.UpdateAsync(currentStageHistory!);
-            }
-            else
-            {
-                var mappedStage = _mapper.Map<StageHistory>(parcelStageModel);
-                mappedStage.CreatedDate = DateTime.UtcNow;
-                await _stageService.AddStage(mappedStage);
-            }
+            var mappedStage = _mapper.Map<StageHistory>(parcelStageModel);
+            mappedStage.CreatedDate = DateTime.UtcNow;
+            await _stageService.AddStage(mappedStage);
+
             return true;
         }
     }

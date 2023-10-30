@@ -4,14 +4,14 @@ namespace SwiftShip.BusinessLogic
 {
     public interface IParcelBusinessLogic
     {
-        Task<bool> AddAsync(BaseParcelModel parcelModel);
+        Task<bool> AddAsync(ParcelModel parcelModel);
 
         Task<List<ParcelModel>> GetAllAsync();
 
-        Task<bool> UpdateAsync(BaseParcelModel parcelModel);
+        Task<bool> UpdateAsync(ParcelModel parcelModel);
 
         Task<CustomerParcelModel> GetAsync(Guid guid);
 
-        Task<List<CustomerModel>> GetByIdentifier(Guid guid);
+        Task RemoveAsync(int? id);
     }
 }

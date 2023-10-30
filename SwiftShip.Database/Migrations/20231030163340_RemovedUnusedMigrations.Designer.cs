@@ -12,8 +12,8 @@ using SwiftShip.Database;
 namespace SwiftShip.Database.Migrations
 {
     [DbContext(typeof(SwiftShipDbContext))]
-    [Migration("20231028165517_Test")]
-    partial class Test
+    [Migration("20231030163340_RemovedUnusedMigrations")]
+    partial class RemovedUnusedMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,9 +59,6 @@ namespace SwiftShip.Database.Migrations
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("Identifier")
                         .HasColumnType("uniqueidentifier");
@@ -123,10 +120,6 @@ namespace SwiftShip.Database.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -143,35 +136,6 @@ namespace SwiftShip.Database.Migrations
                     b.HasIndex("StageId");
 
                     b.ToTable("StageHistory");
-                });
-
-            modelBuilder.Entity("SwiftShip.Database.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("SwiftShip.Database.Entities.Parcel", b =>

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using SwiftShip.BusinessLogic.Models;
 using SwiftShip.Database.Entities;
-using SwiftShip.Database.Enums;
 using SwiftShip.Service;
 
 namespace SwiftShip.BusinessLogic
@@ -10,38 +9,33 @@ namespace SwiftShip.BusinessLogic
     {
         private readonly IParcelService _parcelService;
         private readonly IMapper _mapper;
-        private readonly IStageBusinessLogic _stageBusinessLogic;
+        private readonly IStageHandler _stageBusinessLogic;
+        private readonly IStageHistoryInitializer _stageHistoryInitializer;
 
-        public ParcelBusinessLogic(IParcelService parcelService, IMapper mapper, IStageBusinessLogic stageBusinessLogic)
+        public ParcelBusinessLogic(IParcelService parcelService, 
+            IMapper mapper, 
+            IStageHandler stageBusinessLogic, 
+            IStageHistoryInitializer stageHistoryInitializer)
         {
             _parcelService = parcelService;
             _mapper = mapper;
             _stageBusinessLogic = stageBusinessLogic;
+            _stageHistoryInitializer = stageHistoryInitializer;
         }
 
-        public async Task<bool> AddAsync(BaseParcelModel parcelModel)
+        public async Task<bool> AddAsync(ParcelModel parcelModel)
         {
-            if(parcelModel.Id != null)
+            if (parcelModel.Id != null)
                 throw new Exception("Cannot insert object with identifier");
 
-            var mappedResult = _mapper.Map<Parcel>(parcelModel);
-            parcelModel.StageType = StageType.Warehouse;
+            var mappedResult = Map(parcelModel);
+
             var isInitialStage = _stageBusinessLogic.IsInitial(parcelModel.StageType);
 
-            if(!isInitialStage)
+            if (!isInitialStage)
             {
                 throw new Exception("Cannot insert stage with wrong identifier");
             }
-
-            mappedResult.StageHistory = new List<StageHistory>
-            {
-                new StageHistory
-                {
-                    Address =  parcelModel.Address,
-                    StageId = (int)parcelModel.StageType,
-                }
-            };
-            mappedResult.Identifier = Guid.NewGuid();
 
             await _parcelService.AddAsync(mappedResult);
 
@@ -51,9 +45,22 @@ namespace SwiftShip.BusinessLogic
             return false;
         }
 
+        private Parcel Map(ParcelModel parcelModel)
+        {
+            var mappedResult = _mapper.Map<Parcel>(parcelModel);
+
+            mappedResult.StageHistory = _stageHistoryInitializer.CreateInitial(parcelModel.Address);
+
+            mappedResult.Identifier = Guid.NewGuid();
+
+            mappedResult.RegisteredDate = DateTime.UtcNow;
+
+            return mappedResult;
+        }
+
         public async Task<CustomerParcelModel> GetAsync(Guid id)
         {
-            var result = await _parcelService.GetAsync(e => e.Identifier == id);
+            var result = await _parcelService.GetOrderedAsync(e => e.Identifier == id);
             if (result == null)
                 throw new Exception("Parcel not found");
 
@@ -67,13 +74,13 @@ namespace SwiftShip.BusinessLogic
             return _mapper.Map<List<ParcelModel>>(result);
         }
 
-        public async Task<bool> UpdateAsync(BaseParcelModel parcelModel)
+        public async Task<bool> UpdateAsync(ParcelModel parcelModel)
         {
             if (parcelModel.Id == null)
                 throw new ArgumentNullException("Cannot update object without identifier");
 
-            //verify state
-            var dbParcel = await _parcelService.GetAsync(e => e.Id == parcelModel.Id.Value);
+            var dbParcel = await _parcelService.GetOrderedAsync(e => e.Id == parcelModel.Id.Value);
+            
             if (dbParcel == null)
             {
                 throw new Exception();
@@ -86,9 +93,16 @@ namespace SwiftShip.BusinessLogic
             return true;
         }
 
-        public Task<List<CustomerModel>> GetByIdentifier(Guid guid)
+        public async Task RemoveAsync(int? id)
         {
-            throw new NotImplementedException();
+            var dbParcel = await _parcelService.GetBaseAsync(id.Value);
+
+            if (dbParcel == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            await _parcelService.RemoveAsync(dbParcel);
         }
     }
 }

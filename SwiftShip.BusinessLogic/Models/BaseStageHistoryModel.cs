@@ -2,7 +2,7 @@
 
 namespace SwiftShip.BusinessLogic.Models
 {
-    public class BaseStageModel
+    public class BaseStageHistoryModel
     {
         public string Address { get; set; }
 

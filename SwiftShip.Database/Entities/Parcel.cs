@@ -12,8 +12,6 @@ namespace SwiftShip.Database.Entities
 
         public DateTime RegisteredDate { get; set; }
 
-        public DateTime EndDate { get; set; }
-
         [InverseProperty("Parcel")]
         public ICollection<StageHistory> StageHistory { get; set; }
 

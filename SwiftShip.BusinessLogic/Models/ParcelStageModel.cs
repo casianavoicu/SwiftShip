@@ -10,7 +10,6 @@ namespace SwiftShip.BusinessLogic.Models
 
         public StageType Stage { get; set; }
 
-        [Required]
         public string Address { get; set; }
     }
 }

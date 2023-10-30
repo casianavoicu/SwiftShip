@@ -42,22 +42,6 @@ namespace SwiftShip.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Parcel",
                 columns: table => new
                 {
@@ -121,7 +105,8 @@ namespace SwiftShip.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Parcel_CustomerId",
                 table: "Parcel",
-                column: "CustomerId");
+                column: "CustomerId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_StageHistory_ParcelId",
@@ -139,9 +124,6 @@ namespace SwiftShip.Database.Migrations
         {
             migrationBuilder.DropTable(
                 name: "StageHistory");
-
-            migrationBuilder.DropTable(
-                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Parcel");

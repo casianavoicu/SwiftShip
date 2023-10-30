@@ -21,7 +21,7 @@ namespace SwiftShip.Database
 
         public DbSet<StageHistory> StageHistory { get; set; }
 
-        public DbSet<User> User { get; set; }
+        public DbSet<Customer> Customer { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

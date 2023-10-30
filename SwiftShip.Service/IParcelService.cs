@@ -7,13 +7,14 @@ namespace SwiftShip.Service
     {
         Task<List<Parcel>> GetAllAsync();
 
-        Task<Parcel?> GetAsync(Expression<Func<Parcel, bool>> expression);
+        Task<Parcel?> GetOrderedAsync(Expression<Func<Parcel, bool>> expression);
 
-        Task DeleteAsync(Parcel parcel);
+        Task RemoveAsync(Parcel parcel);
 
         Task UpdateAsync(Parcel parcel);
 
         Task AddAsync(Parcel parcel);
         Task<Parcel?> GetExtendedAsync(int id);
+        Task<Parcel?> GetBaseAsync(int id);
     }
 }
