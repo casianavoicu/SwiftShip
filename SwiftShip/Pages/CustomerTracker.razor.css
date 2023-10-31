@@ -3,3 +3,8 @@
     border-radius: 3px;
     width: 50%;
 }
+.nice-link {
+    text-decoration: none;
+    color: #ff0000; 
+    font-weight: bold; 
+}

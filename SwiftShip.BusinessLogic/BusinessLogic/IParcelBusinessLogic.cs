@@ -12,6 +12,7 @@ namespace SwiftShip.BusinessLogic.BusinessLogic
 
         Task<CustomerParcelModel> GetAsync(Guid guid);
 
-        Task RemoveAsync(int? id);
+        Task<bool> RemoveAsync(int? id);
+        Task<List<ParcelStageModel>> GetAllWithStageAsync();
     }
 }

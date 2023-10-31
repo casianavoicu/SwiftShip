@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using SwiftShip.Database;
 using SwiftShip.Database.Entities;
 using System.Linq.Expressions;
@@ -49,7 +50,7 @@ namespace SwiftShip.Service
         {
             return await _dbContext.Parcel
                 .Include(e => e.Customer)
-                 .Include(e => e.StageHistory)
+                .Include(e => e.StageHistory)
                     .ThenInclude(e => e.Stage)
                 .Where(e => e.StageHistory.Any())
                 .OrderByDescending(e => e.StageHistory.Max(sh => sh.CreatedDate))

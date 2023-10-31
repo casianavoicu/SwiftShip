@@ -12,6 +12,9 @@
     </div>
     <DxButton Text="Apply" Click="Search" CssClass="mx-2" />
 </div>
+<div>
+    <a class="nice-link">@errorText</a>
+</div>
 
 @if (SearchText != null && Data != null)
 {
@@ -22,16 +25,18 @@
     string? SearchText { get; set; }
     private CustomerParcelModel? Data;
 
+    private string errorText;
+
     private async Task Search()
     {
-        Guid guid;
-        if (Guid.TryParse(SearchText, out guid))
+        if (Guid.TryParse(SearchText, out var guid))
         {
-            Console.WriteLine(guid);
+            errorText = string.Empty;
         }
         else
         {
-            Console.WriteLine("Invalid GUID format");
+            errorText = "The input is not valid";
+            return;
         }
         var result = await _parcelBusinessLogic.GetAsync(guid);
         Data = result;

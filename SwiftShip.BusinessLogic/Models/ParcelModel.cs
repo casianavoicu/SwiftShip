@@ -1,5 +1,4 @@
-﻿using SwiftShip.BusinessLogic.Models;
-using SwiftShip.Database.Enums;
+﻿using SwiftShip.Database.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace SwiftShip.BusinessLogic.Models

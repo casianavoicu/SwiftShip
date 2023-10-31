@@ -23,30 +23,23 @@ namespace SwiftShip.BusinessLogic.BusinessLogic
             _stageBusinessLogic = stageBusinessLogic;
         }
 
-        public async Task<List<ParcelStageModel>> GetAllAsync()
-        {
-            var dbParcels = await _parcelService.GetAllAsync();
-
-            var mapped = _mapper.Map<List<ParcelStageModel>>(dbParcels);
-
-            return mapped;
-        }
-
         public async Task<bool> AddAsync(ParcelStageModel parcelStageModel)
         {
             var dbParcel = await _parcelService.GetExtendedAsync(parcelStageModel.Id);
 
             if (dbParcel == null)
-                throw new ArgumentNullException();
+            {
+                throw new Exception("Parcel not found");
+            }
 
             var currentStageHistory = dbParcel.StageHistory.OrderByDescending(x => x.CreatedDate).First();
             var currentStage = (StageType)currentStageHistory.StageId;
 
-            var nextStage = _stageBusinessLogic
-                .IsCurrentStageCorrectBasedOnPrevious(currentStage,
+            var isValid = _stageBusinessLogic 
+                .IsValidTransition(currentStage,
                 parcelStageModel.Stage);
 
-            if (nextStage == false)
+            if (isValid == false)
                 throw new Exception();
 
             var mappedStage = _mapper.Map<StageHistory>(parcelStageModel);

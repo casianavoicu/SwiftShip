@@ -16,8 +16,8 @@ namespace SwiftShip.BusinessLogic.Mapper
 
             CreateMap<Parcel, ParcelModel>()
                .ForMember(e => e.RegisteredDate, o => o.MapFrom(s => s.RegisteredDate))
-               .ForMember(e => e.Address, o => o.MapFrom(s => s.StageHistory.First().Address))
-               .ForMember(e => e.StageType, o => o.MapFrom(s => (StageType) s.StageHistory!.First().StageId))
+               .ForMember(e => e.Address, o => o.MapFrom(s => s.StageHistory.OrderByDescending(e => e.CreatedDate).First().Address))
+               .ForMember(e => e.StageType, o => o.MapFrom(s => (StageType) s.StageHistory!.OrderByDescending(e => e.CreatedDate).First().StageId))
                .ForMember(e => e.Customer, o => o.MapFrom(s => s.Customer));
 
             CreateMap<CustomerModel, Customer>();
@@ -37,8 +37,8 @@ namespace SwiftShip.BusinessLogic.Mapper
                 .ForMember(e => e.Stage, o => o.Ignore());
 
             CreateMap<Parcel, ParcelStageModel>()
-                .ForMember(e => e.Stage, o => o.MapFrom(s => (StageType)s.StageHistory!.OrderByDescending(x => x.CreatedDate).First().StageId))
-                .ForMember(e => e.Address, o => o.MapFrom(s => s.StageHistory.First().Address));
+                .ForMember(e => e.Stage, o => o.MapFrom(s => (StageType)s.StageHistory.OrderByDescending(e => e.CreatedDate)!.First().StageId))
+                .ForMember(e => e.Address, o => o.MapFrom(s => s.StageHistory.OrderByDescending(e => e.CreatedDate)!.First().Address));
         }
     }
 }

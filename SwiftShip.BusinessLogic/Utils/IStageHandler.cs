@@ -4,8 +4,8 @@ namespace SwiftShip.BusinessLogic.Utils
 {
     public interface IStageHandler
     {
-        List<StageType> GetStageOptions(StageType stageType);
-        bool IsCurrentStageCorrectBasedOnPrevious(StageType existing, StageType current);
+        List<StageType> GetPossibleTransitions(StageType stageType);
+        bool IsValidTransition(StageType from, StageType to);
         bool IsInitial(StageType stageType);
     }
 }

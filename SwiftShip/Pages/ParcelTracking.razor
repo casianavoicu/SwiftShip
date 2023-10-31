@@ -6,6 +6,7 @@
 @using SwiftShip.BusinessLogic.Utils;
 @using SwiftShip.Database.Enums;
 @inject IParcelStageHistoryBusinessLogic _parcelStageBusinessLogic
+@inject IParcelBusinessLogic _parcelBusinessLogic
 @inject IStageHandler _stageBusinessLogic
 
 <DxGrid @ref="Grid"
@@ -58,7 +59,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        DataSource = await _parcelStageBusinessLogic.GetAllAsync();
+        DataSource = await _parcelBusinessLogic.GetAllWithStageAsync();
     }
 
     public void Dispose()
@@ -92,7 +93,7 @@
 
     private void GetFilteredStages(StageType selectedStageType)
     {
-        CurrentStages = _stageBusinessLogic.GetStageOptions(selectedStageType);
+        CurrentStages = _stageBusinessLogic.GetPossibleTransitions(selectedStageType);
     }
 
     private void OnItemChanged(StageType newSelection)
@@ -103,7 +104,6 @@
 
     async Task UpdateDataAsync()
     {
-        DataSource = await _parcelStageBusinessLogic.GetAllAsync();
+        DataSource = await _parcelBusinessLogic.GetAllWithStageAsync();
     }
-   
 }

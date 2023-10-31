@@ -6,9 +6,9 @@ namespace SwiftShip.Service
     {
         public static IServiceCollection AddDbServices(this IServiceCollection services)
         {
-            return services.AddTransient<IParcelService, ParcelService>()
-                           .AddTransient<IStageService, StageService>();
-
+            return services
+                .AddTransient<IParcelService, ParcelService>()
+                .AddTransient<IStageService, StageService>();
         }
     }
 }

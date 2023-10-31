@@ -14,7 +14,9 @@ namespace SwiftShip.Service
         Task UpdateAsync(Parcel parcel);
 
         Task AddAsync(Parcel parcel);
+
         Task<Parcel?> GetExtendedAsync(int id);
+
         Task<Parcel?> GetBaseAsync(int id);
     }
 }

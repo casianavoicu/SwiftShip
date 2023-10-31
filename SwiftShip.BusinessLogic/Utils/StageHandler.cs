@@ -16,13 +16,13 @@ namespace SwiftShip.BusinessLogic.Utils
             return stageType == StageType.Warehouse;
         }
 
-        public bool IsCurrentStageCorrectBasedOnPrevious(StageType existing, StageType current)
+        public bool IsValidTransition(StageType from, StageType to)
         {
-            var stageBasedOnExisting = StageRules[existing];
-            return stageBasedOnExisting.Contains(current);
+            var stageBasedOnExisting = StageRules[from];
+            return stageBasedOnExisting.Contains(to);
         }
 
-        public List<StageType> GetStageOptions(StageType stageType)
+        public List<StageType> GetPossibleTransitions(StageType stageType)
         {
             return StageRules[stageType];
         }
